@@ -2,17 +2,23 @@ version: "3"
 
 tasks:
   reqs-save:
-    desc: save requirements for the project
+    desc: (python) save requirements for the project
     cmds:
       - pip freeze > app_python/requirements.txt
 
-  run-py:
-    desc: run python web application
+  reqs-install:
+    desc: (python) install all requirements for project
     cmds:
-      - uvicorn app_python.main:app --reload
+      - pip install -r app_python/requirements.txt
+
+  run:
+    desc: (python) run web application
+    cmds:
+      - uvicorn app_python.main:app --port 8080 --reload
 
   make-env:
     dir: ./app_go/
-    desc: create .env file for go application
+    desc: (go) create .env file for an application
     cmds:
       - cat example.env > .env
+    silent: true
