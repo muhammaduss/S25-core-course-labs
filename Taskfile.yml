@@ -1,0 +1,18 @@
+version: "3"
+
+tasks:
+  reqs-save:
+    desc: save requirements for the project
+    cmds:
+      - pip freeze > app_python/requirements.txt
+
+  run-py:
+    desc: run python web application
+    cmds:
+      - uvicorn app_python.main:app --reload
+
+  make-env:
+    dir: ./app_go/
+    desc: create .env file for go application
+    cmds:
+      - cat example.env > .env
