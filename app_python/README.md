@@ -74,4 +74,3 @@ Command with my image, if you want, use instead last argument - your pulled or b
 ```bash
 docker run -p 8080:8080 muhammaduss/app-python
 ```
-
