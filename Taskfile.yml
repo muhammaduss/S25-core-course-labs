@@ -22,3 +22,9 @@ tasks:
     cmds:
       - cat example.env > .env
     silent: true
+
+  test:
+    dir: ./app_python/
+    desc: (python) run unit tests
+    cmds:
+      - python -m tests.test

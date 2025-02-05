@@ -74,3 +74,20 @@ Command with my image, if you want, use instead last argument - your pulled or b
 ```bash
 docker run -p 8080:8080 muhammaduss/app-python
 ```
+
+## Unit tests
+
+To run the tests (assuming that previous steps with activating environment, installing requirements and running the application locally are accomplished):
+
+```bash
+python -m tests.test
+```
+Or by taskfile:
+
+```bash
+task test
+```
+
+## CI workflow
+
+`python-ci.yml` has two job - first is build python application locally and run tests, second is for docker part: login, build & push. Workflow is triggered only if PR happens.
