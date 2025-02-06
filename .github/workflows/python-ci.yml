@@ -32,7 +32,6 @@ jobs:
 
       - name: Unit tests
         run: |
-          pip install unittest
           python -m unittest app_python.tests.test
 
   docker:
@@ -59,8 +58,19 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
+          context: .
+          file: ./app_python/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
