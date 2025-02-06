@@ -1,6 +1,6 @@
-[![Python CI](https://github.com/muhammaduss/S25-core-course-labs/actions/workflows/python-ci.yml/badge.svg?branch=lab3)](https://github.com/muhammaduss/S25-core-course-labs/actions/workflows/python-ci.yml)
-
 # MSK Time application
+
+[![Python CI](https://github.com/muhammaduss/S25-core-course-labs/actions/workflows/python-ci.yml/badge.svg?branch=lab3)](https://github.com/muhammaduss/S25-core-course-labs/actions/workflows/python-ci.yml)
 
 ## Overview
 
@@ -84,6 +84,7 @@ To run the tests (assuming that previous steps with activating environment, inst
 ```bash
 python -m tests.test
 ```
+
 Or by taskfile:
 
 ```bash
@@ -92,6 +93,6 @@ task test
 
 ## CI workflow
 
-`python-ci.yml` has three job - first is build python application locally and run tests, second is for docker part: login, build & push, last is to check by Snyk for any vulnerabilites. 
+`python-ci.yml` has three job - first is build python application locally and run tests, second is for docker part: login, build & push, last is to check by Snyk for any vulnerabilites.
 
 Workflow is triggered if updates pushed to lab3 branch or if PR made to `master` branch.
