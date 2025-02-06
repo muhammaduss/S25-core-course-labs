@@ -30,6 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r app_python/requirements.txt
 
+      - name: Lint the code
+        run: |
+          flake8 ./app_python/
+
       - name: Unit tests
         run: |
           python -m unittest app_python.tests.test
@@ -58,7 +62,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./app_python
           file: ./app_python/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -74,3 +78,5 @@ jobs:
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
