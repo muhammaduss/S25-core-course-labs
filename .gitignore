@@ -8,3 +8,11 @@ env/
 # Environment variables
 */.env
 .env
+
+# Terraform variables
+*.tfvars
+*.tfstate
+*.tfstate.*
+**/.terraform/*
+*.terraform.lock.hcl
+*.tfplan
