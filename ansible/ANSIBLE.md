@@ -380,6 +380,127 @@ $ ansible-inventory -i inventory/default_yc.yml --graph
   |  |--host_01
 ```
 
+## Application deployment
+
+Output after running playbook (without any tags):
+
+```bash
+$ ansible-playbook -i inventory/default_yc.yml playbooks/app_python/main.yaml
+[DEPRECATION WARNING]: Specifying a list of dictionaries for vars is deprecated in favor of specifying a dictionary. Error occurred in the
+file: /mnt/c/users/muhammad/devops-fork/ansible/playbooks/app_python/main.yaml, line: 7. This feature will be removed in version 2.18.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [Deploy python app] ***********************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************
+ok: [host_01]
+
+TASK [docker : install docker] *****************************************************************************************************************
+included: /mnt/c/users/muhammad/devops-fork/ansible/roles/docker/tasks/install-docker.yml for host_01
+
+TASK [docker : install dependencies] ***********************************************************************************************************
+ok: [host_01] => (item=apt-transport-https)
+ok: [host_01] => (item=ca-certificates)
+ok: [host_01] => (item=curl)
+ok: [host_01] => (item=gnupg-agent)
+ok: [host_01] => (item=software-properties-common)
+
+TASK [docker : add GPG key] ********************************************************************************************************************
+ok: [host_01]
+
+TASK [docker : add docker repository to apt] ***************************************************************************************************
+ok: [host_01]
+
+TASK [docker : install docker] *****************************************************************************************************************
+ok: [host_01] => (item=docker-ce)
+ok: [host_01] => (item=docker-ce-cli)
+ok: [host_01] => (item=containerd.io)
+
+TASK [docker : adding ubuntu to docker group] **************************************************************************************************
+ok: [host_01]
+
+TASK [docker : install docker compose] *********************************************************************************************************
+included: /mnt/c/users/muhammad/devops-fork/ansible/roles/docker/tasks/install-compose.yml for host_01
+
+TASK [docker : Install docker-compose] *********************************************************************************************************
+ok: [host_01]
+
+TASK [docker : Change file ownership, group and permissions] ***********************************************************************************
+ok: [host_01]
+
+TASK [web_app : Wipe] **************************************************************************************************************************
+included: /mnt/c/users/muhammad/devops-fork/ansible/roles/web_app/tasks/0-wipe.yml for host_01
+
+TASK [web_app : Remove container] **************************************************************************************************************
+skipping: [host_01]
+
+TASK [web_app : Remove application directory] **************************************************************************************************
+skipping: [host_01]
+
+TASK [web_app : Deploy] ************************************************************************************************************************
+included: /mnt/c/users/muhammad/devops-fork/ansible/roles/web_app/tasks/deploy.yml for host_01
+
+TASK [web_app : Creating directory] ************************************************************************************************************
+changed: [host_01]
+
+TASK [web_app : Docker compose template copy] **************************************************************************************************
+changed: [host_01]
+
+TASK [web_app : Start containers] **************************************************************************************************************
+changed: [host_01]
+
+PLAY RECAP *************************************************************************************************************************************
+host_01                    : ok=15   changed=3    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
+```
+
+Let's verify that everything works (in vm):
+
+```bash
+ubuntu@epdmbf2q846ijbvjefat:~$ ls
+app
+ubuntu@epdmbf2q846ijbvjefat:~$ docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                                             NAMES
+28352b290d59   muhammaduss/app-python   "uvicorn main:app --…"   9 seconds ago   Up 8 seconds   8080/tcp, 0.0.0.0:8080->80/tcp, :::8080->80/tcp   app-app-1
+ubuntu@epdmbf2q846ijbvjefat:~$ docker exec -it app-app-1 /bin/bash
+user@28352b290d59:/app$ curl localhost:8080/time/
+{"time":"2025-02-23 23:07:26.780666+03:00"}
+```
+
+Now check that wiping works, let's run playbook with tag wipe and specify variable `web_app_full_wipe` as true:
+
+```bash
+$ ansible-playbook -i inventory/default_yc.yml playbooks/app_python/main.yaml --ta
+gs wipe
+[DEPRECATION WARNING]: Specifying a list of dictionaries for vars is deprecated in favor of specifying a dictionary. Error occurred in the
+file: /mnt/c/users/muhammad/devops-fork/ansible/playbooks/app_python/main.yaml, line: 7. This feature will be removed in version 2.18.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [Deploy python app] ***********************************************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************************
+ok: [host_01]
+
+TASK [web_app : Wipe] **************************************************************************************************************************
+included: /mnt/c/users/muhammad/devops-fork/ansible/roles/web_app/tasks/0-wipe.yml for host_01
+
+TASK [web_app : Remove container] **************************************************************************************************************
+changed: [host_01]
+
+TASK [web_app : Remove application directory] **************************************************************************************************
+changed: [host_01]
+
+PLAY RECAP *************************************************************************************************************************************
+host_01                    : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+Verify in vm:
+
+```bash
+ubuntu@epdmbf2q846ijbvjefat:~$ ls
+ubuntu@epdmbf2q846ijbvjefat:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
 ## Acknowledgements
 
 Credits to: [habr-article](https://habr.com/ru/companies/otus/articles/721166/) for helping with setup of custom docker
