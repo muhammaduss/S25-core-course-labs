@@ -18,12 +18,12 @@ Agent that gathers logs and sends them to Loki. Configured in `promtail.yml` and
 
 ### Docker compose
 
-![alt text](image.png)
+![alt text](images/docker_compose.png)
 
 ### Grafana View
 
-![alt text](image-1.png)
+![alt text](images/grafana_view.png)
 
 ### Querying logs with GET endpoint /time/ on python application
 
-![alt text](image-2.png)
+![alt text](images/python_app_query.png)
