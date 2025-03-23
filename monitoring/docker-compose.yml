@@ -92,7 +92,7 @@ services:
       retries: 3
 
   app_python:
-    image: muhammaduss/app-python
+    image: muhammaduss/app-python:latest
     container_name: app_python
     ports:
       - "8080:8080"
@@ -100,6 +100,8 @@ services:
       - loki
     networks:
       - loki
+    volumes:
+      - ./visits.txt:/app/visits.txt
     logging:
       driver: "json-file"
       options:

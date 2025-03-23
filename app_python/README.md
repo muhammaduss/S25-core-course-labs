@@ -96,3 +96,10 @@ task test
 `python-ci.yml` has three job - first is build python application locally and run tests, second is for docker part: login, build & push, last is to check by Snyk for any vulnerabilites.
 
 Workflow is triggered if updates pushed to lab3 branch or if PR made to `master` branch.
+
+## Tracking
+
+Application has endpoint `/visits` which updates each time, when `/` or `/time` routes accessed.
+On monitoring folder, `visits.txt` mounted to docker compose stack, so we can obtain count on host machine.
+
+To verify: `curl http://localhost:8080/time`, then `curl http://localhost:8080/visits`
