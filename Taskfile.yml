@@ -28,3 +28,15 @@ tasks:
     desc: (python) run unit tests
     cmds:
       - python -m tests.test
+
+  build:
+    dir: ./app_python/
+    desc: (python) build docker image
+    cmds:
+      - docker build -t muhammaduss/app-python:latest .
+
+  push:
+    dir: ./app_python/
+    desc: (python) push image to dockerhub
+    cmds:
+      - docker push muhammaduss/app-python:latest

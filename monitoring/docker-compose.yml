@@ -101,7 +101,7 @@ services:
     networks:
       - loki
     volumes:
-      - ./visits.txt:/app/visits.txt
+      - ./visits.txt:/app/visits/visits.txt
     logging:
       driver: "json-file"
       options:

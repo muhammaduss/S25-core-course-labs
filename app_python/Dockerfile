@@ -4,6 +4,7 @@ RUN adduser -u 8444 user
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends python3-pip \
     curl \
+    dnsutils \
     && pip3 install --upgrade pip
 
 WORKDIR /app

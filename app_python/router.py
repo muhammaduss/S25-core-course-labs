@@ -12,17 +12,17 @@ lock = asyncio.Lock()
 
 
 def vistits_update(counter: int):
-    if not os.path.exists('visits.txt'):
-        f = open("visits.txt", "w")
+    if not os.path.exists('visits/visits.txt'):
+        f = open("visits/visits.txt", "w")
         f.write(str(0))
 
-    f = open("visits.txt", "r")
-    if os.stat("visits.txt").st_size == 0:
+    f = open("visits/visits.txt", "r")
+    if os.stat("visits/visits.txt").st_size == 0:
         ex_count = 0
     else:
         ex_count = int(f.read())
 
-    f = open("visits.txt", "w")
+    f = open("visits/visits.txt", "w")
     f.write(str(counter + ex_count))
     f.close()
 
@@ -58,8 +58,8 @@ async def get_time():
 @router.get("/visits", summary="Visits counter")
 async def get_visits():
 
-    f = open("visits.txt", "r")
-    if os.stat("visits.txt").st_size == 0:
+    f = open("visits/visits.txt", "r")
+    if os.stat("visits/visits.txt").st_size == 0:
         count = 0
     else:
         count = int(f.read())
