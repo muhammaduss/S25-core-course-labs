@@ -12,6 +12,9 @@ lock = asyncio.Lock()
 
 
 def vistits_update(counter: int):
+    if not os.path.exists('./visits'):
+        os.makedirs('visits')
+
     if not os.path.exists('visits/visits.txt'):
         f = open("visits/visits.txt", "w")
         f.write(str(0))
